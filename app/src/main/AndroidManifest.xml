@@ -19,10 +19,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dialogs.TransactionActivity"
-            android:parentActivityName=".activities.LoginActivity">
-        </activity>
-        <activity
             android:name=".activities.MenuActivity"
             android:parentActivityName=".activities.LoginActivity">
         </activity>

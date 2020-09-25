@@ -17,12 +17,12 @@ import com.example.mymoneyapp.api.BankRestClient;
 import java.util.function.Function;
 
 
-public class DepositActivity extends AppCompatDialogFragment {
+public class DepositDialog extends AppCompatDialogFragment {
     private EditText editTextAmount;
     private int usersAccountNumber;
     private DialogInterface.OnClickListener okListener;
 
-    public DepositActivity(int accountNumber, DialogInterface.OnClickListener okListener) {
+    public DepositDialog(int accountNumber, DialogInterface.OnClickListener okListener) {
         usersAccountNumber = accountNumber;
         this.okListener = okListener;
     }

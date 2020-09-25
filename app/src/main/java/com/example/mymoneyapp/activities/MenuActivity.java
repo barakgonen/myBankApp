@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mymoneyapp.R;
 import com.example.mymoneyapp.api.BankRestClient;
 import com.example.mymoneyapp.common.Constants;
-import com.example.mymoneyapp.dialogs.DepositActivity;
-import com.example.mymoneyapp.dialogs.TransactionActivity;
-import com.example.mymoneyapp.dialogs.WithdrawActivity;
+import com.example.mymoneyapp.dialogs.DepositDialog;
+import com.example.mymoneyapp.dialogs.TransactionDialog;
+import com.example.mymoneyapp.dialogs.WithdrawDialog;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -39,15 +39,15 @@ public class MenuActivity extends AppCompatActivity {
         transactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), TransactionActivity.class);
-                startActivity(intent);
+                TransactionDialog exampleDialog = new TransactionDialog(userAccountNumber, (dialogInterface, i) -> updateBalance());
+                exampleDialog.show(getSupportFragmentManager(), "example dialog");
             }
         });
 
         withdrawBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WithdrawActivity exampleDialog = new WithdrawActivity(userAccountNumber, (dialogInterface, i) -> updateBalance());
+                WithdrawDialog exampleDialog = new WithdrawDialog(userAccountNumber, (dialogInterface, i) -> updateBalance());
                 exampleDialog.show(getSupportFragmentManager(), "example dialog");
             }
         });
@@ -55,7 +55,7 @@ public class MenuActivity extends AppCompatActivity {
         depositBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DepositActivity exampleDialog = new DepositActivity(userAccountNumber, (dialogInterface, i) -> updateBalance());
+                DepositDialog exampleDialog = new DepositDialog(userAccountNumber, (dialogInterface, i) -> updateBalance());
                 exampleDialog.show(getSupportFragmentManager(), "example dialog");
             }
         });

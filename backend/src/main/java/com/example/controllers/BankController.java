@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.BL.BankBl;
+import com.example.Constants;
 import com.example.model.BankAccount;
 import com.example.model.UserCredentials;
 
@@ -18,6 +19,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.ws.rs.core.Response;
+
+import static com.example.Constants.INVALID_DESTINATION_ACCOUNT;
+import static com.example.Constants.INVALID_DST_ACCOUNT;
+import static com.example.Constants.NOT_ENOUGH_MONEY_IN_SRC_ACCOUNT;
+import static com.example.Constants.NOT_ENOUGH_MONEY_IN_USERS_ACCOUNT;
+import static com.example.Constants.SUCCESSFUL;
+import static com.example.Constants.SUCCESSFUL_OPERATION;
+import static com.example.Constants.TRANSACTION_STATUS;
 
 @RestController
 @RequestMapping("/api")
@@ -53,9 +62,34 @@ public class BankController {
     @PostMapping("/withdraw/{account}/{amount}")
     @ResponseStatus(HttpStatus.OK)
     public javax.ws.rs.core.Response withDraw(@PathVariable Integer account, @PathVariable float amount) {
-        if (bankBl.withDrawUserAccount(account, amount))
-            return Response.ok().build();
-        else
-            return Response.serverError().build();
+        String withDrawStatus = "";
+
+        switch (bankBl.withDrawUserAccount(account, amount)){
+            case SUCCESSFUL_OPERATION:
+                withDrawStatus = SUCCESSFUL;
+                break;
+            case NOT_ENOUGH_MONEY_IN_SRC_ACCOUNT:
+                withDrawStatus = NOT_ENOUGH_MONEY_IN_USERS_ACCOUNT;
+                break;
+        }
+        return Response.status(Response.Status.OK).header(TRANSACTION_STATUS, withDrawStatus).build();
+    }
+
+    @PostMapping("/transaction/{sourceAccount}/{amount}/{destinationAccount}")
+    public javax.ws.rs.core.Response transaction(@PathVariable Integer sourceAccount, @PathVariable float amount, @PathVariable Integer destinationAccount) {
+        String transactionStatus = "";
+        switch (bankBl.preformTransactionBetweenAccounts(sourceAccount, amount, destinationAccount)){
+            case SUCCESSFUL_OPERATION:
+                transactionStatus = SUCCESSFUL;
+                break;
+            case INVALID_DST_ACCOUNT:
+                transactionStatus = INVALID_DESTINATION_ACCOUNT;
+                break;
+            case NOT_ENOUGH_MONEY_IN_SRC_ACCOUNT:
+                transactionStatus = NOT_ENOUGH_MONEY_IN_USERS_ACCOUNT;
+                break;
+        }
+
+        return Response.status(Response.Status.OK).header(TRANSACTION_STATUS, transactionStatus).build();
     }
 }

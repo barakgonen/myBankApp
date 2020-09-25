@@ -15,12 +15,12 @@ import com.example.mymoneyapp.R;
 import com.example.mymoneyapp.api.BankRestClient;
 
 
-public class WithdrawActivity extends AppCompatDialogFragment {
+public class WithdrawDialog extends AppCompatDialogFragment {
     private EditText editTextAmount;
     private int usersAccountNumber;
     private DialogInterface.OnClickListener okListener;
 
-    public WithdrawActivity(int accountNumber, DialogInterface.OnClickListener okListener) {
+    public WithdrawDialog(int accountNumber, DialogInterface.OnClickListener okListener) {
         usersAccountNumber = accountNumber;
         this.okListener = okListener;
     }
@@ -42,7 +42,7 @@ public class WithdrawActivity extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         float amountToDeposit = Float.parseFloat(editTextAmount.getText().toString());
                         if (amountToDeposit > 0)
-                            BankRestClient.withdraw(usersAccountNumber, amountToDeposit);
+                            Toast.makeText(getContext(), BankRestClient.withdraw(usersAccountNumber, amountToDeposit), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(getContext(), "Can't deposite negative amount", Toast.LENGTH_LONG).show();
                         okListener.onClick(dialogInterface, i);

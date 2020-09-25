@@ -38,6 +38,8 @@ dependencies {
 	}
 
 	implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jersey', version: '2.3.4.RELEASE'
+
 }
 
 test {

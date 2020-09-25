@@ -3,6 +3,7 @@ package com.example.mymoneyapp.api;
 import com.example.mymoneyapp.data.model.BankAccount;
 import com.example.mymoneyapp.data.model.UserCredentials;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import org.asynchttpclient.AsyncHttpClient;
@@ -11,6 +12,7 @@ import org.asynchttpclient.ListenableFuture;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
 import org.asynchttpclient.Response;
+import org.asynchttpclient.request.body.Body;
 import org.asynchttpclient.util.HttpConstants;
 
 import java.util.concurrent.ExecutionException;
@@ -51,20 +53,7 @@ public class BankRestClient {
     public static void logout(Integer accountNumber){
 
     }
-//
-//    public static boolean deleteNote(Long id) {
-//        Request deleteRequest = Dsl.delete(baseUrl + "delete/" + id).build();
-//        ListenableFuture<Response> responseFuture = client.executeRequest(deleteRequest);
-//        try {
-//            responseFuture.get();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        return true;
-//    }
-//
+
     public static boolean deposit(int accountNumber, float amount) {
         if (client == null)
             new BankRestClient();
@@ -74,10 +63,17 @@ public class BankRestClient {
         s.getHeaders().add("Content-Type", "application/json");
 
         ListenableFuture<Response> responseFuture = client.executeRequest(s);
+        try {
+            responseFuture.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
-    public static boolean withdraw(int accountNumber, float amount) {
+    public static String withdraw(int accountNumber, float amount) {
         if (client == null)
             new BankRestClient();
         Request s = new RequestBuilder(HttpConstants.Methods.POST)
@@ -86,7 +82,17 @@ public class BankRestClient {
         s.getHeaders().add("Content-Type", "application/json");
 
         ListenableFuture<Response> responseFuture = client.executeRequest(s);
-        return true;
+        Response res = null;
+        try {
+            res = responseFuture.get();
+            JsonObject j = GSON.fromJson(res.getResponseBody(), JsonObject.class);
+            return j.get("headers").getAsJsonObject().get("TransactionStatus").getAsString();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static Number getUsersCurrentBalance(int accountNumber){
@@ -108,5 +114,28 @@ public class BankRestClient {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String executeTransactionToAnotherAccount(int sourceAccountNumber,
+                                                             float amount,
+                                                             int destinationAccountNumber){
+        if (client == null)
+            new BankRestClient();
+        Request s = new RequestBuilder(HttpConstants.Methods.POST)
+                .setUrl(baseUrl + "transaction/" + sourceAccountNumber + "/" + amount + "/" + destinationAccountNumber)
+                .build();
+        s.getHeaders().add("Content-Type", "application/json");
+
+        try {
+            ListenableFuture<Response> responseFuture = client.executeRequest(s);
+            Response res = responseFuture.get();
+            JsonObject j = GSON.fromJson(res.getResponseBody(), JsonObject.class);
+            return j.get("headers").getAsJsonObject().get("TransactionStatus").getAsString();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

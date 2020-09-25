@@ -5,19 +5,19 @@ package com.example.mymoneyapp.data.model;
  */
 public class LoggedInUser {
 
-    private String userId;
-    private String displayName;
+    private String idNumber;
+    private String logInCode;
 
     public LoggedInUser(String userId, String displayName) {
-        this.userId = userId;
-        this.displayName = displayName;
+        this.idNumber = userId;
+        this.logInCode = displayName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getIdNumber() {
+        return idNumber;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getLogInCode() {
+        return logInCode;
     }
 }

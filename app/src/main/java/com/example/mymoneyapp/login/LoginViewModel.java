@@ -1,4 +1,4 @@
-package com.example.mymoneyapp.ui.login;
+package com.example.mymoneyapp.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -8,8 +8,9 @@ import android.util.Patterns;
 
 import com.example.mymoneyapp.data.LoginRepository;
 import com.example.mymoneyapp.data.Result;
-import com.example.mymoneyapp.data.model.LoggedInUser;
+import com.example.mymoneyapp.data.model.BankAccount;
 import com.example.mymoneyapp.R;
+import com.example.mymoneyapp.data.model.UserCredentials;
 
 public class LoginViewModel extends ViewModel {
 
@@ -21,21 +22,21 @@ public class LoginViewModel extends ViewModel {
         this.loginRepository = loginRepository;
     }
 
-    LiveData<LoginFormState> getLoginFormState() {
+    public LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
     }
 
-    LiveData<LoginResult> getLoginResult() {
+    public LiveData<LoginResult> getLoginResult() {
         return loginResult;
     }
 
-    public void login(String username, String password) {
+    public void login(UserCredentials userCredentials) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        Result<BankAccount> result = loginRepository.login(userCredentials);
 
         if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getLogInCode())));
+            BankAccount data = ((Result.Success<BankAccount>) result).getData();
+            loginResult.setValue(new LoginResult(R.string.welcome));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }

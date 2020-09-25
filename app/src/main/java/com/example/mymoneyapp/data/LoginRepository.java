@@ -1,6 +1,8 @@
 package com.example.mymoneyapp.data;
 
+import com.example.mymoneyapp.data.model.BankAccount;
 import com.example.mymoneyapp.data.model.LoggedInUser;
+import com.example.mymoneyapp.data.model.UserCredentials;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -14,7 +16,7 @@ public class LoginRepository {
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
-    private LoggedInUser user = null;
+    private BankAccount userData = null;
 
     // private constructor : singleton access
     private LoginRepository(LoginDataSource dataSource) {
@@ -29,25 +31,25 @@ public class LoginRepository {
     }
 
     public boolean isLoggedIn() {
-        return user != null;
+        return userData != null;
     }
 
     public void logout() {
-        user = null;
-        dataSource.logout();
+        dataSource.logout(userData.getAccountNumber());
+        userData = null;
     }
 
-    private void setLoggedInUser(LoggedInUser user) {
-        this.user = user;
+    private void setLoggedInUser(BankAccount user) {
+        this.userData = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<BankAccount> login(UserCredentials userCredentials) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
+        Result<BankAccount> result = dataSource.login(userCredentials);
         if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+            setLoggedInUser(((Result.Success<BankAccount>) result).getData());
         }
         return result;
     }

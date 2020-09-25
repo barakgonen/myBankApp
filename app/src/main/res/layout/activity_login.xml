@@ -9,10 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <EditText
-        android:id="@+id/identificationNum"
+        android:id="@+id/accountNumber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/loginCode"
+        android:id="@+id/pinCode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -37,7 +37,7 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/identificationNum" />
+        app:layout_constraintTop_toBottomOf="@+id/accountNumber" />
 
     <Button
         android:id="@+id/logIn"
@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginCode"
+        app:layout_constraintTop_toBottomOf="@+id/pinCode"
         app:layout_constraintVertical_bias="0.2" />
 
     <ProgressBar
@@ -67,8 +67,8 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/loginCode"
-        app:layout_constraintStart_toStartOf="@+id/loginCode"
+        app:layout_constraintEnd_toEndOf="@+id/pinCode"
+        app:layout_constraintStart_toStartOf="@+id/pinCode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

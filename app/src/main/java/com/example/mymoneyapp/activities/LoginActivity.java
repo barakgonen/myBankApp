@@ -1,16 +1,8 @@
-package com.example.mymoneyapp.ui.login;
+package com.example.mymoneyapp.activities;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -22,12 +14,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.mymoneyapp.R;
-import com.example.mymoneyapp.ui.login.LoginViewModel;
-import com.example.mymoneyapp.ui.login.LoginViewModelFactory;
+import com.example.mymoneyapp.common.Constants;
+import com.example.mymoneyapp.data.model.UserCredentials;
+import com.example.mymoneyapp.login.LoggedInUserView;
+import com.example.mymoneyapp.login.LoginFormState;
+import com.example.mymoneyapp.login.LoginResult;
+import com.example.mymoneyapp.login.LoginViewModel;
+import com.example.mymoneyapp.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
     private LoginViewModel loginViewModel;
 
     @Override
@@ -37,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText identificationNum = findViewById(R.id.identificationNum);
-        final EditText loginCode = findViewById(R.id.loginCode);
+        final EditText identificationNum = findViewById(R.id.accountNumber);
+        final EditText loginCode = findViewById(R.id.pinCode);
         final Button loginButton = findViewById(R.id.logIn);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
@@ -102,8 +104,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(identificationNum.getText().toString(),
+                    UserCredentials userCredentials = new UserCredentials(Integer.parseInt(identificationNum.getText().toString()),
                             loginCode.getText().toString());
+                    loginViewModel.login(userCredentials);
                 }
                 return false;
             }
@@ -112,9 +115,22 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "maniac", Toast.LENGTH_LONG).show();
+
+                EditText accountNumberEditText = findViewById(R.id.accountNumber);
+                Integer accountNumber = Integer.parseInt(accountNumberEditText.getText().toString());
+                EditText pinCodeEditTest = findViewById(R.id.pinCode);
+                String pinCode = pinCodeEditTest.getText().toString();
+
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(identificationNum.getText().toString(),
-                        loginCode.getText().toString());
+
+                UserCredentials userCredentials = new UserCredentials(accountNumber, pinCode);
+                loginViewModel.login(userCredentials);
+
+                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                intent.putExtra(Constants.ACCOUNT_NUMBER, String.valueOf(accountNumber));
+                intent.putExtra(Constants.PIN_CODE, pinCode);
+                startActivity(intent);
             }
         });
     }

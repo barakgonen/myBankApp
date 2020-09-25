@@ -1,4 +1,4 @@
-package com.example.mymoneyapp.ui.login;
+package com.example.mymoneyapp.login;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyMoneyApp</string>
+    <string name="app_name">Maze Bank</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -11,4 +11,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name= "identification_number">Identification Number</string>
     <string name= "login_code">Login Code</string>
+    <string name="deposit">Deposit to your account</string>
+    <string name="amount"><u>amount:</u> </string>
+    <string name="cancel"><b>cancel</b></string>
 </resources>

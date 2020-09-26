@@ -1,5 +1,7 @@
 package com.example.mymoneyapp.api;
 
+import android.util.Pair;
+
 import com.example.mymoneyapp.data.model.BankAccount;
 import com.example.mymoneyapp.data.model.UserCredentials;
 import com.google.gson.Gson;
@@ -28,18 +30,24 @@ public class BankRestClient {
         baseUrl = "http://10.0.2.2:8080/api/";
     }
 
-    public static BankAccount getUserDataForCredentials(UserCredentials userCredentials) {
+    public static Pair<String, BankAccount> getUserDataForCredentials(UserCredentials userCredentials) {
         if (client == null)
             new BankRestClient();
         Request s = new RequestBuilder(HttpConstants.Methods.GET)
                 .setBody(GSON.toJson(userCredentials))
-                .setUrl(baseUrl + "account/")
+                .setUrl(baseUrl + "login/")
                 .build();
 
         s.getHeaders().add("Content-Type", "application/json");
-        ListenableFuture<Response> responseFuture = client.executeRequest(s);
         try {
-            return GSON.fromJson(responseFuture.get().getResponseBody(), BankAccount.class);
+            ListenableFuture<Response> responseFuture = client.executeRequest(s);
+            Response res = responseFuture.get();
+
+            JsonObject j = GSON.fromJson(res.getResponseBody(), JsonObject.class);
+            BankAccount toReturn = GSON.fromJson(j.get("entity"), BankAccount.class);
+            String serverStringResponse = j.get("headers").getAsJsonObject().get("login").getAsString();
+            Pair<String, BankAccount> queriedBankAccount = new Pair<>(serverStringResponse, toReturn);
+            return queriedBankAccount;
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

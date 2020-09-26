@@ -29,11 +29,15 @@ import com.example.mymoneyapp.login.LoginResult;
 import com.example.mymoneyapp.login.LoginViewModel;
 import com.example.mymoneyapp.login.LoginViewModelFactory;
 
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.JdkLoggerFactory;
+
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        InternalLoggerFactory.setDefaultFactory(JdkLoggerFactory.INSTANCE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
@@ -67,32 +71,36 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
+
+                Toast.makeText(getApplicationContext(), loginResult.getBankAccountView().getServerResponseMsg(), Toast.LENGTH_LONG).show();
+
                 setResult(Activity.RESULT_OK);
 
-                //Complete and destroy login activity once successful
-                finish();
+                if (loginResult.isLoggedInSuccessfuly()){
+                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    intent.putExtra(Constants.ACCOUNT_NUMBER, String.valueOf(loginResult.getBankAccountView().getUsersAccount().getAccountNumber()));
+                    intent.putExtra(Constants.PIN_CODE, loginResult.getBankAccountView().getUsersAccount().getPinCode());
+                    startActivity(intent);
+                }
             }
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
+                // ignore this event is raised when user tries to input character, before it appeared on screen
+                System.out.println("Event1");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
+                // ignore this event raised when text is about to appear on the screen
+                System.out.println("Event2");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                // This event called after value has been written it takes the whole text box
                 loginViewModel.loginDataChanged(identificationNum.getText().toString(),
                         loginCode.getText().toString());
             }
@@ -115,8 +123,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "maniac", Toast.LENGTH_LONG).show();
-
                 EditText accountNumberEditText = findViewById(R.id.accountNumber);
                 Integer accountNumber = Integer.parseInt(accountNumberEditText.getText().toString());
                 EditText pinCodeEditTest = findViewById(R.id.pinCode);
@@ -126,22 +132,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 UserCredentials userCredentials = new UserCredentials(accountNumber, pinCode);
                 loginViewModel.login(userCredentials);
-
-                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                intent.putExtra(Constants.ACCOUNT_NUMBER, String.valueOf(accountNumber));
-                intent.putExtra(Constants.PIN_CODE, pinCode);
-                startActivity(intent);
             }
         });
-    }
-
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 }

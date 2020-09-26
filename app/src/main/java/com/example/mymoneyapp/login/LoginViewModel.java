@@ -1,15 +1,15 @@
 package com.example.mymoneyapp.login;
 
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.util.Patterns;
-
+import com.example.mymoneyapp.R;
 import com.example.mymoneyapp.data.LoginRepository;
 import com.example.mymoneyapp.data.Result;
 import com.example.mymoneyapp.data.model.BankAccount;
-import com.example.mymoneyapp.R;
 import com.example.mymoneyapp.data.model.UserCredentials;
 
 public class LoginViewModel extends ViewModel {
@@ -31,15 +31,12 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(UserCredentials userCredentials) {
-        // can be launched in a separate asynchronous job
         Result<BankAccount> result = loginRepository.login(userCredentials);
-
-        if (result instanceof Result.Success) {
-            BankAccount data = ((Result.Success<BankAccount>) result).getData();
-            loginResult.setValue(new LoginResult(R.string.welcome));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+        if (result instanceof Result.Success)
+            loginResult.setValue(new LoginResult(result.getResponseFromServer(),
+                    ((Result.Success<BankAccount>) result).getData()));
+        else
+            loginResult.setValue(new LoginResult(result.getResponseFromServer(), null));
     }
 
     public void loginDataChanged(String username, String password) {

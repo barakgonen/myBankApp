@@ -14,4 +14,11 @@
     <string name="deposit">Deposit to your account</string>
     <string name="amount"><u>amount:</u> </string>
     <string name="cancel"><b>cancel</b></string>
+    <string name="SUCCESSFUL">Chosen operation ended successfully!</string>
+    <string name="NOT_ENOUGH_MONEY_IN_USERS_ACCOUNT">Can\'t finish operation, because: There is not enough money in your account</string>
+    <string name="INVALID_DESTINATION_ACCOUNT">Transaction had failed, because: invalid destination account</string>
+    <string name="TRANSACTION_STATUS">TransactionStatus</string>
+    <string name="DISABLED_ACCOUNT_LOGIN">Your account has been disabled. Please contact system administrator</string>
+    <string name="SET_ACCOUNT_TO_DISABLED">Your account has been disabled since you have tried to login for 3 times in a row. Sorry</string>
+    <string name="LOGIN_FAILED">Login has failed, please try again</string>
 </resources>

@@ -4,6 +4,8 @@ import com.example.mymoneyapp.data.model.BankAccount;
 import com.example.mymoneyapp.data.model.LoggedInUser;
 import com.example.mymoneyapp.data.model.UserCredentials;
 
+import org.asynchttpclient.Response;
+
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
@@ -51,6 +53,7 @@ public class LoginRepository {
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<BankAccount>) result).getData());
         }
+
         return result;
     }
 }

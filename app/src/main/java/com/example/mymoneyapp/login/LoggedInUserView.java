@@ -1,17 +1,24 @@
 package com.example.mymoneyapp.login;
 
+import com.example.mymoneyapp.data.model.BankAccount;
+
 /**
  * Class exposing authenticated user details to the UI.
  */
 public class LoggedInUserView {
-    private String displayName;
-    //... other data fields that may be accessible to the UI
+    private String serverResponseMsg;
+    private BankAccount usersAccount;
 
-    public LoggedInUserView(String displayName) {
-        this.displayName = displayName;
+    public LoggedInUserView(String serverResponseMsg, BankAccount usersAccountData) {
+        this.serverResponseMsg = serverResponseMsg;
+        this.usersAccount = usersAccountData;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getServerResponseMsg() {
+        return serverResponseMsg;
+    }
+
+    public BankAccount getUsersAccount() {
+        return usersAccount;
     }
 }

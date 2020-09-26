@@ -1,10 +1,13 @@
 package com.example.mymoneyapp.data;
 
+import com.example.mymoneyapp.data.model.BankAccount;
+
 /**
  * A generic class that holds a result success w/ data or an error exception.
  */
 public class Result<T> {
     // hide the private constructor to limit subclass types (Success, Error)
+    protected String responseFromServer;
     private Result() {
     }
 
@@ -15,17 +18,22 @@ public class Result<T> {
             return "Success[data=" + success.getData().toString() + "]";
         } else if (this instanceof Result.Error) {
             Result.Error error = (Result.Error) this;
-            return "Error[exception=" + error.getError().toString() + "]";
+            return "Error[response from server =" + error.responseFromServer + "]";
         }
         return "";
+    }
+
+    public String getResponseFromServer(){
+        return responseFromServer;
     }
 
     // Success sub-class
     public final static class Success<T> extends Result {
         private T data;
 
-        public Success(T data) {
+        public Success(T data, String serverResponseString) {
             this.data = data;
+            this.responseFromServer = serverResponseString;
         }
 
         public T getData() {
@@ -35,14 +43,8 @@ public class Result<T> {
 
     // Error sub-class
     public final static class Error extends Result {
-        private Exception error;
-
-        public Error(Exception error) {
-            this.error = error;
-        }
-
-        public Exception getError() {
-            return this.error;
+        public Error(String errorMsg) {
+            responseFromServer = errorMsg;
         }
     }
 }

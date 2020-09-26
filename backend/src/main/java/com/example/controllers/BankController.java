@@ -26,9 +26,9 @@ public class BankController {
     private BankBl bankBl;
 
     @GetMapping("/login/")
-    public Pair<String, BankAccount> loginToUsersBankAccount(@RequestBody UserCredentials userCredentials) {
+    public javax.ws.rs.core.Response loginToUsersBankAccount(@RequestBody UserCredentials userCredentials) {
         Pair<String, BankAccount> queriedBankAccount = bankBl.getBankAccount(userCredentials);
-        return queriedBankAccount;
+        return Response.status(Response.Status.OK).header("login", queriedBankAccount.getFirst()).entity(queriedBankAccount.getSecond()).build();
     }
 
     @GetMapping("/bank/balance/{accountNumber}")

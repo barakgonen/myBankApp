@@ -57,6 +57,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation'org.asynchttpclient:async-http-client:2.12.1'
     implementation 'com.google.code.gson:gson:2.8.6'
-
-
+    implementation 'com.android.support:design:24.2.0'
 }

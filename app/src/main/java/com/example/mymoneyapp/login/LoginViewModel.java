@@ -39,11 +39,9 @@ public class LoginViewModel extends ViewModel {
             loginResult.setValue(new LoginResult(result.getResponseFromServer(), null));
     }
 
-    public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
+    public void loginDataChanged(String accountPin) {
+        if (!isAccountPinValid(accountPin)) {
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_pin));
         } else {
             loginFormState.setValue(new LoginFormState(true));
         }
@@ -61,8 +59,7 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+    private boolean isAccountPinValid(String accountPin) {
+        return accountPin != null && accountPin.trim().length() > 5;
     }
 }

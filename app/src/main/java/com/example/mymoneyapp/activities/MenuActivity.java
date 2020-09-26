@@ -3,6 +3,7 @@ package com.example.mymoneyapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.menu_activity);
         userAccountNumber = Integer.parseInt(getIntent().getStringExtra(Constants.ACCOUNT_NUMBER));
         currentBalanceTxt = findViewById(R.id.currentBalanceTxt);

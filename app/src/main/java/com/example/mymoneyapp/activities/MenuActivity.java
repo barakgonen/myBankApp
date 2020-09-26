@@ -1,10 +1,12 @@
 package com.example.mymoneyapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     private ImageButton transactionBtn;
     private ImageButton withdrawBtn;
     private ImageButton depositBtn;
+    private ImageButton logutBtn;
     private int userAccountNumber;
     private TextView currentBalanceTxt;
 
@@ -36,6 +39,7 @@ public class MenuActivity extends AppCompatActivity {
         transactionBtn = findViewById(R.id.makeTransactionButton);
         withdrawBtn = findViewById(R.id.withDrawButton);
         depositBtn = findViewById(R.id.depositButton);
+        logutBtn = findViewById(R.id.logoutButton);
 
         transactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +64,21 @@ public class MenuActivity extends AppCompatActivity {
                 exampleDialog.show(getSupportFragmentManager(), "example dialog");
             }
         });
+
+        logutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BankRestClient.logout();
+                Intent intent = new Intent(MenuActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), "In order to logout, press logout button", Toast.LENGTH_LONG).show();
     }
 
     public void updateBalance() {

@@ -32,15 +32,6 @@ public class LoginRepository {
         return instance;
     }
 
-    public boolean isLoggedIn() {
-        return userData != null;
-    }
-
-    public void logout() {
-        dataSource.logout(userData.getAccountNumber());
-        userData = null;
-    }
-
     private void setLoggedInUser(BankAccount user) {
         this.userData = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted

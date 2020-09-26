@@ -24,7 +24,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="80dp" />
 
         <ImageButton
             android:id="@+id/depositButton"
@@ -41,7 +41,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="75dp" />
 
         <ImageButton
             android:id="@+id/withDrawButton"
@@ -53,13 +53,25 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="75dp" />
 
         <ImageButton
             android:id="@+id/makeTransactionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/bank_transaction"
+            android:background="@null"
+            android:text="New Transaction" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="75dp" />
+
+        <ImageButton
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logout_icon"
             android:background="@null"
             android:text="New Transaction" />
     </LinearLayout>

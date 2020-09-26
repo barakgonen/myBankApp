@@ -28,11 +28,6 @@ public class LoginDataSource {
         }
     }
 
-    public void logout(Integer accountNumber) {
-        // TODO: revoke authentication
-        BankRestClient.logout(accountNumber);
-    }
-
     private boolean isValidAccountData(Pair<String, BankAccount> queriedAccount) {
         return queriedAccount.first.equals(SUCCESSFUL) &&
                 (queriedAccount.second.getPinCode() != null &&

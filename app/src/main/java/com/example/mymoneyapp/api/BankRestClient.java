@@ -15,11 +15,12 @@ import org.asynchttpclient.ListenableFuture;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
 import org.asynchttpclient.Response;
-import org.asynchttpclient.request.body.Body;
 import org.asynchttpclient.util.HttpConstants;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
+import static com.example.mymoneyapp.common.Constants.HOST_BASE_URL;
 
 public class BankRestClient {
     private static AsyncHttpClient client;
@@ -29,36 +30,25 @@ public class BankRestClient {
     private BankRestClient() {
         client = Dsl.asyncHttpClient();
         GSON = new Gson();
-        baseUrl = "http://10.0.2.2:8080/api/";
+        baseUrl = HOST_BASE_URL;
     }
 
     public static Pair<String, BankAccount> getUserDataForCredentials(UserCredentials userCredentials) {
         if (client == null)
             new BankRestClient();
-        Request s = new RequestBuilder(HttpConstants.Methods.GET)
-                .setBody(GSON.toJson(userCredentials))
-                .setUrl(baseUrl + "login/")
-                .build();
 
-        s.getHeaders().add("Content-Type", "application/json");
+        Request req = getRequest(HttpConstants.Methods.GET,"login", GSON.toJson(userCredentials));
+
         try {
-            ListenableFuture<Response> responseFuture = client.executeRequest(s);
-            Response res = responseFuture.get();
-
-            JsonObject j = GSON.fromJson(res.getResponseBody(), JsonObject.class);
-            BankAccount toReturn = GSON.fromJson(j.get("entity"), BankAccount.class);
-            String serverStringResponse = j.get("headers").getAsJsonObject().get("login").getAsString();
-            if (!serverStringResponse.equals(Constants.SUCCESSFUL)){
-                client.close();
-                client = null;
+            Response res = executeRequest(req);
+            JsonObject responseBodyAsJson = responseBodyAsJson(res);
+            String serverStringResponse = getResponseStringFromServer(responseBodyAsJson);
+            if (!isServerResponseIsSuccessfull(serverStringResponse)){
+                resetClientConnection();
+                return new Pair<>(serverStringResponse, null);
             }
-
-            Pair<String, BankAccount> queriedBankAccount = new Pair<>(serverStringResponse, toReturn);
-            return queriedBankAccount;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            else
+                return new Pair<>(serverStringResponse, getBankAccountFromJson(responseBodyAsJson));
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -67,8 +57,25 @@ public class BankRestClient {
         return null;
     }
 
-    public static void logout(Integer accountNumber){
+    private static boolean isServerResponseIsSuccessfull(String serverStringResponse) {
+        return serverStringResponse.equals(Constants.SUCCESSFUL);
+    }
 
+    private static void resetClientConnection() throws IOException {
+        client.close();
+        client = null;
+    }
+
+    public static void logout() {
+        if (client == null)
+            new BankRestClient();
+        try {
+            Request logoutRequest = getRequest(HttpConstants.Methods.POST, "logout");
+            executeRequest(logoutRequest);
+            resetClientConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean deposit(int accountNumber, float amount) {
@@ -112,7 +119,7 @@ public class BankRestClient {
         return "";
     }
 
-    public static Number getUsersCurrentBalance(int accountNumber){
+    public static Number getUsersCurrentBalance(int accountNumber) {
         if (client == null)
             new BankRestClient();
         Request s = new RequestBuilder(HttpConstants.Methods.GET)
@@ -134,8 +141,8 @@ public class BankRestClient {
     }
 
     public static String executeTransactionToAnotherAccount(int sourceAccountNumber,
-                                                             float amount,
-                                                             int destinationAccountNumber){
+                                                            float amount,
+                                                            int destinationAccountNumber) {
         if (client == null)
             new BankRestClient();
         Request s = new RequestBuilder(HttpConstants.Methods.POST)
@@ -154,5 +161,48 @@ public class BankRestClient {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private static Request getRequest(String method, String extendedUrl, String body) {
+        Request req = new RequestBuilder(method)
+                .setUrl(baseUrl + extendedUrl + "/")
+                .setBody(body)
+                .build();
+        req.getHeaders().add("Content-Type", "application/json");
+        return req;
+    }
+
+    private static Request getRequest(String method, String extendedUrl) {
+        Request req = new RequestBuilder(method)
+                .setUrl(baseUrl + extendedUrl + "/")
+                .build();
+        req.getHeaders().add("Content-Type", "application/json");
+        return req;
+    }
+
+    private static Response executeRequest(Request req){
+        ListenableFuture<Response> responseFuture = client.executeRequest(req);
+        Response res = null;
+        try {
+            res = responseFuture.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    private static JsonObject responseBodyAsJson(Response res){
+        return GSON.fromJson(res.getResponseBody(), JsonObject.class);
+    }
+
+    private static BankAccount getBankAccountFromJson(JsonObject body){
+        return GSON.fromJson(body.get("entity"), BankAccount.class);
+    }
+
+    private static String getResponseStringFromServer(JsonObject responseAsJson){
+        return responseAsJson.get("headers").getAsJsonObject().get("login").getAsString();
     }
 }

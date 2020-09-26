@@ -14,4 +14,6 @@ public class Constants {
 
     public final static String TRANSACTION_DIALOG_TITLE = "Make a transaction between accounts";
     public final static String TRANSACTION_DIALOG_ERROR_MSG = "Can't transact negative amount";
+
+    public final static String HOST_BASE_URL = "http://10.0.2.2:8080/api/";
 }

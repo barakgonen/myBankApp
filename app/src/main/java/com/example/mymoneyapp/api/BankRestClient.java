@@ -2,6 +2,7 @@ package com.example.mymoneyapp.api;
 
 import android.util.Pair;
 
+import com.example.mymoneyapp.common.Constants;
 import com.example.mymoneyapp.data.model.BankAccount;
 import com.example.mymoneyapp.data.model.UserCredentials;
 import com.google.gson.Gson;
@@ -17,6 +18,7 @@ import org.asynchttpclient.Response;
 import org.asynchttpclient.request.body.Body;
 import org.asynchttpclient.util.HttpConstants;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class BankRestClient {
@@ -46,6 +48,11 @@ public class BankRestClient {
             JsonObject j = GSON.fromJson(res.getResponseBody(), JsonObject.class);
             BankAccount toReturn = GSON.fromJson(j.get("entity"), BankAccount.class);
             String serverStringResponse = j.get("headers").getAsJsonObject().get("login").getAsString();
+            if (!serverStringResponse.equals(Constants.SUCCESSFUL)){
+                client.close();
+                client = null;
+            }
+
             Pair<String, BankAccount> queriedBankAccount = new Pair<>(serverStringResponse, toReturn);
             return queriedBankAccount;
         } catch (ExecutionException e) {
@@ -53,6 +60,8 @@ public class BankRestClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

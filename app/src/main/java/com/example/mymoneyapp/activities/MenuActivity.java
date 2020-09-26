@@ -1,10 +1,9 @@
 package com.example.mymoneyapp.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -19,9 +18,9 @@ import com.example.mymoneyapp.dialogs.WithdrawDialog;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private Button transactionBtn;
-    private Button withdrawBtn;
-    private Button depositBtn;
+    private ImageButton transactionBtn;
+    private ImageButton withdrawBtn;
+    private ImageButton depositBtn;
     private int userAccountNumber;
     private TextView currentBalanceTxt;
 
@@ -65,7 +64,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void updateBalance() {
         float currentBalance = getAccountsCurrentBalance();
-        currentBalanceTxt.setText(String.valueOf(currentBalance));
+        currentBalanceTxt.setText("Current balance is: " + String.valueOf(currentBalance) + "$");
     }
 
     private float getAccountsCurrentBalance() {

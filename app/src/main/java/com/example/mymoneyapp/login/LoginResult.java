@@ -2,7 +2,6 @@ package com.example.mymoneyapp.login;
 
 import androidx.annotation.Nullable;
 
-import com.example.mymoneyapp.data.Result;
 import com.example.mymoneyapp.data.model.BankAccount;
 
 import static com.example.mymoneyapp.common.Constants.SUCCESSFUL;
@@ -13,6 +12,7 @@ import static com.example.mymoneyapp.common.Constants.SUCCESSFUL;
 public class LoginResult {
     private LoggedInUserView success;
     private boolean isLoggedInSuccessfuly;
+
     public LoginResult(String serverResponse, BankAccount usersAccount) {
         success = new LoggedInUserView(serverResponse, usersAccount);
         isLoggedInSuccessfuly = serverResponse.equals(SUCCESSFUL);
@@ -23,7 +23,7 @@ public class LoginResult {
         return success;
     }
 
-    public boolean isLoggedInSuccessfuly(){
+    public boolean isLoggedInSuccessfuly() {
         return isLoggedInSuccessfuly;
     }
 }

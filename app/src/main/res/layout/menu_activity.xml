@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
+    android:background="@drawable/gradient"
     tools:context=".activities.MenuActivity">
 
     <LinearLayout
@@ -16,23 +17,50 @@
             android:id="@+id/currentBalanceTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Current Balance is: "
+            android:textSize="22dp"
+            android:gravity="center"
             />
-        <Button
-            android:id="@+id/depositButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Deposit" />
 
-        <Button
-            android:id="@+id/withDrawButton"
+        <Space
             android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <ImageButton
+            android:id="@+id/depositButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:src="@drawable/bank_deposit"
             android:layout_height="wrap_content"
+            android:forceDarkAllowed="false"
+            android:text="Deposit"
+            android:background="@null"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textIsSelectable="false" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <ImageButton
+            android:id="@+id/withDrawButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bank_withdraw"
+            android:background="@null"
             android:text="Withdraw" />
 
-        <Button
-            android:id="@+id/makeTransactionButton"
+        <Space
             android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <ImageButton
+            android:id="@+id/makeTransactionButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/bank_transaction"
+            android:background="@null"
             android:text="New Transaction" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

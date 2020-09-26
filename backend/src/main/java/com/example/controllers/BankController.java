@@ -35,14 +35,14 @@ public class BankController {
         return Response.status(Response.Status.OK).header("login", queriedBankAccount.getFirst()).entity(queriedBankAccount.getSecond()).build();
     }
 
-    @GetMapping("/bank/balance/{accountNumber}")
+    @GetMapping("/bank/balance/{accountNumber}/")
     public float currentBalanceForAccount(HttpSession session, @PathVariable Integer accountNumber) {
         if (session.getAttribute("isConnected").equals("true") && !session.isNew())
             return bankBl.getAccountBalance(accountNumber);
         return Float.parseFloat(null);
     }
 
-    @PostMapping("/deposit/{account}/{amount}")
+    @PostMapping("/deposit/{account}/{amount}/")
     @ResponseStatus(HttpStatus.OK)
     public javax.ws.rs.core.Response depositToAccount(HttpSession session, @PathVariable Integer account, @PathVariable float amount) {
         if (session.getAttribute("isConnected").equals("true") && !session.isNew()) {
@@ -54,7 +54,7 @@ public class BankController {
         return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
     }
 
-    @PostMapping("/withdraw/{account}/{amount}")
+    @PostMapping("/withdraw/{account}/{amount}/")
     @ResponseStatus(HttpStatus.OK)
     public javax.ws.rs.core.Response withDraw(HttpSession session, @PathVariable Integer account, @PathVariable float amount) {
         if (session.getAttribute("isConnected").equals("true") && !session.isNew()) {
@@ -64,7 +64,7 @@ public class BankController {
         return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
     }
 
-    @PostMapping("/transaction/{sourceAccount}/{amount}/{destinationAccount}")
+    @PostMapping("/transaction/{sourceAccount}/{amount}/{destinationAccount}/")
     public javax.ws.rs.core.Response transaction(HttpSession session, @PathVariable Integer sourceAccount, @PathVariable float amount, @PathVariable Integer destinationAccount) {
         if (session.getAttribute("isConnected").equals("true") && !session.isNew()) {
             String transactionStatus =

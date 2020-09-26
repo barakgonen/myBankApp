@@ -1,6 +1,7 @@
 package com.example.mymoneyapp.dialogs;
 
 import android.content.DialogInterface;
+import android.widget.Toast;
 
 import com.example.mymoneyapp.R;
 import com.example.mymoneyapp.api.BankRestClient;
@@ -20,7 +21,7 @@ public class WithdrawDialog extends AbstractDialog {
     }
 
     @Override
-    protected void preformApiCall() {
-        BankRestClient.withdraw(usersAccountNumber, amountFromSrcAccount);
+    protected String preformApiCall() {
+        return BankRestClient.withdraw(usersAccountNumber, amountFromSrcAccount);
     }
 }

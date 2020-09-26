@@ -29,8 +29,8 @@ public class TransactionDialog extends AbstractDialog {
     }
 
     @Override
-    protected void preformApiCall() {
+    protected String preformApiCall() {
         int destinationAccountNumber = Integer.parseInt(destinationAccountTxt.getText().toString());
-        BankRestClient.executeTransactionToAnotherAccount(usersAccountNumber, amountFromSrcAccount, destinationAccountNumber);
+        return BankRestClient.executeTransactionToAnotherAccount(usersAccountNumber, amountFromSrcAccount, destinationAccountNumber);
     }
 }

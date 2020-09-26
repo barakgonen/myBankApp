@@ -60,7 +60,7 @@ public abstract class AbstractDialog extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         amountFromSrcAccount = Float.parseFloat(editTextAmount.getText().toString());
                         if (amountFromSrcAccount > 0)
-                            preformApiCall();
+                            Toast.makeText(getContext(), preformApiCall(), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(getContext(), exceptionMsgToUser, Toast.LENGTH_LONG).show();
                         okListener.onClick(dialogInterface, i);
@@ -71,7 +71,7 @@ public abstract class AbstractDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    protected abstract void preformApiCall();
+    protected abstract String preformApiCall();
 
     protected void initializeOtherViews(View v){
         // Empty funcs. most dialog does not need it

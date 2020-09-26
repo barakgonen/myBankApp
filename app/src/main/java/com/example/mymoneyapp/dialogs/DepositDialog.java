@@ -19,7 +19,11 @@ public class DepositDialog extends AbstractDialog {
     }
 
     @Override
-    protected void preformApiCall() {
-        BankRestClient.deposit(usersAccountNumber, amountFromSrcAccount);
+    protected String preformApiCall() {
+        boolean response = BankRestClient.deposit(usersAccountNumber, amountFromSrcAccount);
+        if (response)
+            return "Your money deposited to your account as expected";
+        else
+            return "Problem accorded while depositing money, try again";
     }
 }
